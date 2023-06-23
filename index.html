@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accesible loader</title>
+</head>
+<body>
+    <button id="toggle-loading" aria-controls="live-region">Load</button>
+    <div id="live-region" role="alert" aria-live="assertive"></div>
+    <div class="absolute-center">
+        <div id="spinner" class="spinner"></div>
+    </div>
+    <div id="page-content" style="display: none;">
+        <h1>Hello</h1>
+        <p>Content</p>
+    </div>
+    <a href="#  ">Fake link</a>
+    <script>
+        const labels = {
+            alert : {
+                LOAD: 'Content is loading...',
+                FINISH_LOADING: 'Content ready'
+            },
+            button: {
+                LOAD: 'Loading...',
+                FINISH_LOADING: 'Load'
+            }
+        }
+        const loadButton = document.getElementById('toggle-loading')
+        const loadingContainer = document.getElementById('live-region')
+        const spinner = document.getElementById('spinner')
+        const pageContent = document.getElementById('page-content')
+        let isLoading = true
+        
+        const sendAlert = (alert) => {
+            loadingContainer.appendChild(alert)
+        }
+
+        const createAlert = (label) => {
+            const alert = document.createElement('p')
+
+            alert.classList.add('vh')
+            alert.textContent = label
+
+            return alert
+        }
+
+        const trapFocus = (event) => {
+            if (event.which === 9) // tab
+                event.preventDefault();
+        }
+
+        loadButton.onclick = () => {
+            let pageDisplayStyle, spinnerDisplayStyle, pLabel, buttonLabel
+
+            isLoading = !isLoading
+
+            if (isLoading) {
+                pLabel = labels.alert.FINISH_LOADING
+                buttonLabel = labels.button.FINISH_LOADING
+                pageDisplayStyle = 'block'
+                spinnerDisplayStyle = 'none'
+                document.removeEventListener('keydown', trapFocus)
+            } else {
+                pLabel = labels.alert.LOAD
+                buttonLabel = labels.button.LOAD
+                pageDisplayStyle = 'none'
+                spinnerDisplayStyle = 'block'
+                document.addEventListener('keydown', trapFocus)
+            }
+
+            const pAlert = createAlert(pLabel)
+            sendAlert(pAlert)
+            loadButton.innerText = buttonLabel
+            spinner.style.display = spinnerDisplayStyle
+            pageContent.style.display = pageDisplayStyle
+
+            setTimeout(() => {
+                pAlert.remove();
+            }, 1000)
+        }
+    </script>
+    <style>
+        .vh {
+            position: absolute;
+            overflow: hidden;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            border: 0;
+            clip: rect(0 0 0 0);
+        }
+
+        .absolute-center {
+            z-index: -1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 5px solid black;
+            border-bottom-color: red;
+            border-radius: 50%;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            
+            display: none;
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</body>
+</html>
