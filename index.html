@@ -6,7 +6,7 @@
 </head>
 <body>
     <button id="toggle-loading" aria-controls="live-region">Load</button>
-    <div id="live-region" role="alert" aria-live="assertive"></div>
+    <div id="live-region" class="vh" role="alert" aria-live="assertive"></div>
     <div class="absolute-center">
         <div id="spinner" class="spinner"></div>
     </div>
@@ -39,7 +39,6 @@
         const createAlert = (label) => {
             const alert = document.createElement('p')
 
-            alert.classList.add('vh')
             alert.textContent = label
 
             return alert
