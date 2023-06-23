@@ -68,12 +68,12 @@
                 document.addEventListener('keydown', trapFocus)
             }
 
-            const pAlert = createAlert(pLabel)
-            sendAlert(pAlert)
             loadButton.innerText = buttonLabel
             spinner.style.display = spinnerDisplayStyle
             pageContent.style.display = pageDisplayStyle
-
+            
+            const pAlert = createAlert(pLabel)
+            sendAlert(pAlert)
             setTimeout(() => {
                 pAlert.remove();
             }, 1000)
